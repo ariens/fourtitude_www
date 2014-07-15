@@ -1,0 +1,9 @@
+<p>Dear <i>{{user.username}},</i></p>
+<br/>
+<p>Thanks for taking the time to register on my website.  Before you can login you need to activate your e-mail account by clicking on the link below.</p>
+<br />
+<p><a href="{{url_for('email_activation', confirmation_code = user.email_activation_code, _external = True)}}">Activate E-mail</a></p>
+<br 
+<p>Regards,</p>
+<br />
+<b>Fourtitude Brewing Co.</b>

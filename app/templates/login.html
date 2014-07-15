@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>If you do not have an account on this site already then you can click <a href="/register">register</a> to create one.</p>
+<i><p>Please note that Fourtitude Brewing never uses your account for anything other than to validatie that you're a real person.</i></p>
+<form action="" method="post" name="login">
+    {{form.hidden_tag()}}
+    <p>E-mail Address {{form.email}}</p>
+    <p>Password {{form.password }}</p>
+    <p>{{form.remember_me}} Remember Me</p>
+    <p><input type="submit" value="Sign In"></p>
+</form>
+{% endblock %}

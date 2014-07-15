@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>Using the below form you can create an accout that will allow you to login to this site.</p>
+<form action="" method="post" name="register">
+    {{form.hidden_tag()}}
+    <p>
+		{{form.username.label}} {{form.username}}
+		{% for error in form.errors.username %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p>
+		{{form.email.label}} {{form.email}}
+		{% for error in form.errors.email %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p>
+		{{form.email_confirm.label}} {{form.email_confirm}}
+		{% for error in form.errors.email_confirm %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p>
+		{{form.password.label}} {{form.password}}
+		{% for error in form.errors.password %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p>
+		{{form.password_confirm.label}} {{form.password_confirm}}
+		{% for error in form.errors.password_confirm %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p>
+		{{form.firstname.label}} {{form.firstname }}
+		{% for error in form.errors.firstname %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p>
+		{{form.lastname.label}} {{form.lastname }}
+		{% for error in form.errors.lastname %}
+        <span style="color: red;">[{{error}}]</span>
+        {% endfor %}<br>
+	</p>
+    <p><input type="submit" value="Sign In"></p>
+</form>
+{% endblock %}
