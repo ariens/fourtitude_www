@@ -12,9 +12,13 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 MAIL_SERVER = 'mail.layerzero.ca'
 MAIL_PORT = 587 
 MAIL_USERNAME = 'debug@ariens.ca'
-MAIL_PASSWORD = 'changeme'
+MAIL_PASSWORD = '###'
 MAIL_USE_SSL = False
 MAIL_USE_TLS = True
 
 # administrator list
 ADMINS = ['dave@ariens.ca']
+
+# email activation settings
+ACTIVATION_CODE_VALID_FOR_SECONDS = 86400
+

@@ -3,7 +3,7 @@ import os
 from app import app, lm, db
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import current_user, UserMixin
-from .models import User
+from .models import User, EmailActivation
 from . import forms 
 from . import models
 from . import emails
@@ -28,11 +28,13 @@ def register():
             new_user = User(
                 username=form.username.data,
                 email=form.email.data,
-                role=models.ROLE_USER,
-                email_activation_code=User.generate_email_activation_code(),
-                email_verified=False)
-            emails.send_user_activation(new_user)
+                role=models.ROLE_USER)
             db.session.add(new_user)
+            db.session.commit()
+            new_user_email_activation = EmailActivation(new_user.id)
+            db.session.add(new_user_email_activation)
+            db.session.commit()
+            emails.send_user_email_activation(new_user_email_activation)
             db.session.commit()
             flash("Please check your e-mail for activation instructions")
         else:

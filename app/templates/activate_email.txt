@@ -2,7 +2,7 @@ Dear {{user.username}},
 
 Thanks for taking the time to register on my website.  Before you can login you need to activate your e-mail account by clicking on the link below.
 
-{{url_for('email_activation', confirmation_code = user.email_activation_code, _external = True)}}
+{{url_for('email_activation', confirmation_code = activation.activation_code, _external = True)}}
 
 Regards,
 
