@@ -8,54 +8,60 @@ from . import forms
 from . import models
 from . import emails
 
+
 @app.route('/')
 def index():
     user = {'nickname': "dave", 'full_name': "Dave Ariens"}
     return render_template(
         "index.html",
-        title = "Home",
-        user = user)
+        title="Home",
+        user=user)
 
-@app.route('/register', methods = ['GET', 'POST'])
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     #registration = None;
     form = forms.RegisterForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email = form.email.data).first()
-        print ("and the user is: ", user)
+        user = User.query.filter_by(email=form.email.data).first()
         if user is None:
             new_user = User(
-                username = form.username.data,
-                email = form.email.data,
-                role = models.ROLE_USER,
-                email_activation_code = User.generate_email_activation_code(),
-                email_verified = False)
+                username=form.username.data,
+                email=form.email.data,
+                role=models.ROLE_USER,
+                email_activation_code=User.generate_email_activation_code(),
+                email_verified=False)
             emails.send_user_activation(new_user)
             db.session.add(new_user)
             db.session.commit()
-            flash("Please check your e-mail for activation instructions");
+            flash("Please check your e-mail for activation instructions")
         else:
             flash("That e-mail address has already been registered on this site")
     return render_template(
         'register.html',
-        title = 'Register',
-        form = form)
+        title='Register',
+        form=form)
 
-@app.route('/email_activation', methods = ['GET', 'POST'])
+
+@app.route('/email_activation', methods=['GET', 'POST'])
 def email_activation():
+    flash("the activation code is: " + request.args['confirmation_code'])
+    user=User.query.filter_by(email_activation=request.args['confirmation_code'])
+
     return render_template(
         'email_activation.html',
-        title = 'Activate Your Account')
+        title='Activate Your Account')
 
-@app.route('/login', methods = ['GET', 'POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = forms.LoginForm()
     return render_template(
         'login.html',
-        title = 'Login',
-        form = form)
+        title='Login',
+        form=form)
+
 
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
