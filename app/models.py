@@ -12,11 +12,17 @@ ROLE_ADMIN = 1
 class User(app.db.Model):
     id = app.db.Column(app.db.Integer, primary_key=True)
     username = app.db.Column(app.db.String(64), unique=True)
+    first_name = app.db.Column(app.db.String(35))
+    last_name = app.db.Column(app.db.String(35))
     email = app.db.Column(app.db.String(120), unique=True)
+    password_digest = app.db.Column(app.db.String(60))
     role = app.db.Column(app.db.SmallInteger, default=ROLE_USER)
 
     @staticmethod
     def is_authenticated():
+        return True
+
+    def is_active(self):
         return True
 
     def email_activated(self):
@@ -34,6 +40,10 @@ class User(app.db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+class EmailActivationException(Exception):
+    pass
 
 
 class EmailActivation(app.db.Model):
@@ -57,10 +67,29 @@ class EmailActivation(app.db.Model):
 
     @staticmethod
     def gen_unique_user_activation_code():
+        """
+        activates a valid, non-expired, inactive email activation record
+        :return: EmailActivation
+        """
         activation_code = EmailActivation.gen_random_activation_code()
         while EmailActivation.query.filter_by(activation_code=activation_code).first() is not None:
             activation_code = EmailActivation.gen_random_activation_code()
         return activation_code
+
+    @staticmethod
+    def activate_via_activation_code(activation_code):
+        email_activation = EmailActivation.query.filter_by(activation_code=activation_code).first()
+        if email_activation is None:
+            raise EmailActivationException("Cannot find that activation code")
+        if email_activation.activated is True:
+            raise EmailActivationException("That code has already been activated")
+        if datetime.utcnow() > email_activation.date_expires:
+            raise EmailActivationException("That activation code expired on ", email_activation.date_expires)
+        email_activation.activated = True
+        app.db.session.add(email_activation)
+        app.db.session.commit()
+        return email_activation
+
 
 @app.lm.user_loader
 def load_user(id):

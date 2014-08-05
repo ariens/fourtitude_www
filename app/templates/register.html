@@ -35,14 +35,14 @@
         {% endfor %}<br>
 	</p>
     <p>
-		{{form.firstname.label}} {{form.firstname }}
-		{% for error in form.errors.firstname %}
+		{{form.first_name.label}} {{form.first_name }}
+		{% for error in form.errors.first_name %}
         <span style="color: red;">[{{error}}]</span>
         {% endfor %}<br>
 	</p>
     <p>
-		{{form.lastname.label}} {{form.lastname }}
-		{% for error in form.errors.lastname %}
+		{{form.last_name.label}} {{form.last_name }}
+		{% for error in form.errors.last_name %}
         <span style="color: red;">[{{error}}]</span>
         {% endfor %}<br>
 	</p>
