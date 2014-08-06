@@ -38,17 +38,21 @@ def register():
 
             new_email_address = UserEmailAddress(
                 user_id=new_user.id,
-                email_address=form.email.data
-            )
+                email_address=form.email.data)
             db.session.add(new_email_address)
             db.session.commit()
 
-            activation = EmailActivation(user_id=new_user.id, email_address_id=new_email_address.id)
+            activation = EmailActivation(
+                user_id=new_user.id,
+                email_address_id=new_email_address.id)
             db.session.add(activation)
             db.session.commit()
 
-            emails.send_user_email_activation(activation)
+            new_user.primary_email_id = new_email_address.id
+            db.session.add(new_user)
             db.session.commit()
+
+            emails.send_user_email_activation(activation)
             flash("Please check your e-mail for activation instructions")
     return render_template(
         'register.html',
@@ -67,14 +71,8 @@ def before_request():
     g.user = current_user
 
 
-@lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
-
-
 class LoginException(Exception):
     pass
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -83,6 +81,7 @@ def login():
         return redirect(url_for('index'))
     form = forms.LoginForm()
     if form.validate_on_submit():
+        session['remember_me'] = form.remember_me.data
         try:
             email = UserEmailAddress.query.filter_by(email_address=form.email.data).first()
             if email is None:
@@ -125,8 +124,7 @@ def email_activation():
         email_address.confirmed = True
         db.session.add(email_address)
         db.session.commit()
-        new_user = User.query.filter_by(id=activation.user_id).first()
-        flash("E-mail address " + email_address.email_address + " has been successfully activated, you may now login")
+        flash("E-mail address " + email_address.email_address + " activated, you may now login")
         return redirect(url_for('login'))
     except EmailActivationException as err:
         flash("Error activating that e-mail address: {0}".format(err))
@@ -135,7 +133,7 @@ def email_activation():
         title='Activate Your Account')
 
 
-class SendActivationExceptoin(Exception):
+class SendActivationException(Exception):
     pass
 
 
@@ -152,7 +150,7 @@ def send_activation():
             email = UserEmailAddress.query.filter_by(email_address=form.email.data).first()
             if email is None:
                 problem="invalid_email"
-                raise SendActivationExceptoin("Unknown e-mail address")
+                raise SendActivationException("Unknown e-mail address")
             user = User.query.filter_by(id=email.user_id).first()
             if user is None:
                 problem = "unknown_user"
@@ -164,7 +162,7 @@ def send_activation():
             db.session.commit()
             flash("Check your e-mail, we sent a new activation code to " + email.email_address)
             #TODO add a generic activation template here.
-        except SendActivationExceptoin as error:
+        except SendActivationException as error:
             flash(error)
     return render_template(
         'send_activation.html',
@@ -190,7 +188,7 @@ def request_password_reset():
             email = UserEmailAddress.query.filter_by(email_address=form.email.data).first()
             if email is None:
                 problem = "invalid_email"
-                raise SendActivationExceptoin("Unknown e-mail address")
+                raise RequestPasswordResetException("Unknown e-mail address")
             user = User.query.filter_by(id=email.user_id).first()
             if user is None:
                 problem = "unknown_user"
@@ -200,7 +198,7 @@ def request_password_reset():
             db.session.commit()
             emails.send_reset_password_activation(new_activation)
             flash("Check your e-mail, we sent the password reset request to " + email.email_address)
-        except SendActivationExceptoin as error:
+        except RequestPasswordResetException as error:
             flash(error)
     return render_template(
         'request_password_reset.html',
