@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {%  if problem == "invalid_email"%}
+        <p>That e-mail address doesn't match any that we have associated to any of our users.  Please double-check that the e-mail address is spelled correctly.   If you're certain the address is specified correctly and you're still receiving this error message than you can <a href="register">register</a> again with that e-mail address</p>
+    {%   endif %}
+    <p>To send yourself a new activation e-mail enter the e-mail address you specified when you created your account and click the Send Activation button</p>
+    <form action="" method="post" name="send_activation">
+        {{form.hidden_tag()}}
+        <p>
+            E-mail Address {{form.email}}
+            {% for error in form.errors.email %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p><input type="submit" value="Send Activation"></p>
+    </form>
+{% endblock %}

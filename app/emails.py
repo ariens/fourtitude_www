@@ -1,6 +1,6 @@
 from flask.ext.mail import Message
 from app import mail
-from .models import User
+from .models import User, UserEmailAddress
 from flask import render_template
 
 
@@ -13,10 +13,18 @@ def send_email(subject, sender, recipients, text_body, html_body):
 
 def send_user_email_activation(email_activation):
     user = User.query.filter_by(id=email_activation.user_id).first()
-    print("the user is: ", user)
-    print("user email is: ", user.email)
+    email_address = UserEmailAddress.query.filter_by(id=email_activation.email_address_id).first()
     send_email("[www.fourtitude.ca] Activate Your Account",
                "dave@ariens.ca",
-               [user.email],
-               render_template("activate_email.txt", user=user, activation=email_activation),
-               render_template("activate_email.html", user=user, activation=email_activation))
+               [email_address.email_address],
+               render_template("email_activate_account.txt", user=user, activation=email_activation),
+               render_template("email_activate_account.html", user=user, activation=email_activation))
+
+def send_reset_password_activation(email_activation):
+    user = User.query.filter_by(id=email_activation.user_id).first()
+    email_address = UserEmailAddress.query.filter_by(id=email_activation.email_address_id).first()
+    send_email("[www.fourtitude.ca] Reset Your Password",
+               "dave@ariens.ca",
+               [email_address.email_address],
+               render_template("email_password_reset.txt", user=user, activation=email_activation),
+               render_template("email_password_reset.html", user=user, activation=email_activation))
