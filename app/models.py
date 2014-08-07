@@ -1,28 +1,52 @@
 import app
+from app import db
 from config import ACTIVATION_CODE_VALID_FOR_SECONDS
 import string
 import random
 from datetime import timedelta
 from datetime import datetime
 
-class User(app.db.Model):
-    id = app.db.Column(app.db.Integer, primary_key=True)
-    username = app.db.Column(app.db.String(64), unique=True)
-    first_name = app.db.Column(app.db.String(35))
-    last_name = app.db.Column(app.db.String(35))
-    primary_email_id = app.db.Column(app.db.Integer)
-    password_digest = app.db.Column(app.db.String(60))
-    self_deleted = app.db.Column(app.db.Boolean, default=False)
-    admin_disabled = app.db.Column(app.db.Boolean, default=False)
+
+class BeerStyle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(35))
+
+
+class Beer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(35))
+    style_id = db.Column(db.Integer, db.ForeignKey(BeerStyle.id))
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True)
+    first_name = db.Column(db.String(35))
+    last_name = db.Column(db.String(35))
+    primary_email_id = db.Column(db.Integer)
+    password_digest = db.Column(db.String(60))
+    self_deleted = db.Column(db.Boolean, default=False)
+    admin_disabled = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+    def add_to_users_group(self):
+        users_group = UserGroup.query.filter_by(name='users').first()
+        users_membership = UserGroupMembership()
+        users_membership.user_id = self.id
+        users_membership.user_group_id = users_group.id
+        db.session.add(users_membership)
+        db.session.commit()
 
     @staticmethod
     def is_authenticated():
         return True
 
+    #TODO: is_active needs a re-write, doesn't make sense now that the user_email_addresses table exists
     def is_active(self):
-        if EmailActivation.query.filter_by(user_id=self.id, activated=False).first() is not None:
+        if EmailActivation.query.filter_by(user_id=self.id, activated=True).first() is None:
             return False
-
         return True
 
     def email_activated(self):
@@ -38,29 +62,37 @@ class User(app.db.Model):
     def get_id(self):
         return self.id
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+
+class UserEmailAddress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    email_address = db.Column(db.String(255), unique=True)
+    confirmed = db.Column(db.Boolean, default=False)
 
 
-class UserEmailAddress(app.db.Model):
-    id = app.db.Column(app.db.Integer, primary_key=True)
-    user_id = app.db.Column(app.db.Integer, app.db.ForeignKey(User.id))
-    email_address = app.db.Column(app.db.String(255), unique=True)
-    confirmed = app.db.Column(app.db.Boolean, default=False)
+class UserGroup(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(35))
+
+
+class UserGroupMembership(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    user_group_id = db.Column(db.Integer, db.ForeignKey(UserGroup.id))
 
 
 class EmailActivationException(Exception):
     pass
 
 
-class EmailActivation(app.db.Model):
-    id = app.db.Column(app.db.Integer, primary_key=True)
-    user_id = app.db.Column(app.db.Integer, app.db.ForeignKey(User.id))
-    email_address_id = app.db.Column(app.db.Integer)
-    activation_code = app.db.Column(app.db.String(25), unique=True)
-    activated = app.db.Column(app.db.Boolean, default=False)
-    date_created = app.db.Column(app.db.DateTime)
-    date_expires = app.db.Column(app.db.DateTime)
+class EmailActivation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    email_address_id = db.Column(db.Integer)
+    activation_code = db.Column(db.String(25), unique=True)
+    activated = db.Column(db.Boolean, default=False)
+    date_created = db.Column(db.DateTime)
+    date_expires = db.Column(db.DateTime)
 
     def __init__(self, user_id, email_address_id, activated=False, date_created=datetime.utcnow()):
         self.user_id = user_id
@@ -97,8 +129,8 @@ class EmailActivation(app.db.Model):
         if activation.expired is True:
             raise EmailActivationException("That activation code expired on ", activation.date_expires)
         activation.activated = True
-        app.db.session.add(activation)
-        app.db.session.commit()
+        db.session.add(activation)
+        db.session.commit()
         return activation
 
 

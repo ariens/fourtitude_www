@@ -21,6 +21,7 @@ def index():
 def register():
     form = forms.RegisterForm()
     if form.validate_on_submit():
+        #todo: try
         email_address = UserEmailAddress.query.filter_by(email_address=form.email.data).first()
         username = User.query.filter_by(username=form.username.data).first()
         if username is not None:
@@ -35,6 +36,7 @@ def register():
                 password_digest=crypto.get_digest(form.password.data))
             db.session.add(new_user)
             db.session.commit()
+            new_user.add_to_users_group()
 
             new_email_address = UserEmailAddress(
                 user_id=new_user.id,
@@ -79,10 +81,10 @@ def login():
     problem = None
     if g.user is not None and g.user.is_authenticated():
         return redirect(url_for('index'))
-    form = forms.LoginForm()
-    if form.validate_on_submit():
-        session['remember_me'] = form.remember_me.data
-        try:
+    try:
+        form = forms.LoginForm()
+        if form.validate_on_submit():
+            session['remember_me'] = form.remember_me.data
             email = UserEmailAddress.query.filter_by(email_address=form.email.data).first()
             if email is None:
                 problem = "email"
@@ -103,8 +105,8 @@ def login():
                 session.pop('remember_me', None)
             flask_login.login_user(user, remember=remember_me)
             return redirect(request.args.get('next') or url_for('index'))
-        except LoginException as error:
-            flash(error)
+    except LoginException as error:
+        flash(error)
     return render_template(
         'login.html',
         problem=problem,
