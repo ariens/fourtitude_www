@@ -14,5 +14,6 @@ lm.init_app(app)
 lm.login_view = 'login'
 mail = Mail(app)
 
-from app import views, models
+from app import models
+from app import views, views_beer, views_login, views_registration, views_password_reset
 

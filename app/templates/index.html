@@ -1,4 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Hi, {{user.first_name}} {{ user.last_name }}!</h1>
+    {% if user.first_name %}
+        <h1>Hi, {{user.first_name}} {{ user.last_name }}!</h1>
+    {% endif %}
+    <p>Welcome to the Fourtitude Brewing Co.</p>
 {% endblock %}
