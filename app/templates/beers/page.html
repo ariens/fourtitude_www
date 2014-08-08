@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if beers %}
+        <p>Below is the list of Fourtitude beers:</p>
+        {% for beer in beers %}
+            {% include "beers/beer_list_item.html" %}
+        {% endfor %}
+    {% else %}
+        <p>There are no beers--oh the humanity!</p>
+    {% endif %}
+{% endblock %}
