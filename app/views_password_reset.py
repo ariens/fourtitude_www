@@ -43,7 +43,7 @@ def password_reset():
     except EmailActivationException as error:
         flash(error)
     return render_template(
-        'password_reset.html',
+        'auth/page_password_reset.html',
         problem=problem,
         title='Request Password Reset',
         form=form)
@@ -79,7 +79,7 @@ def request_password_reset():
         except RequestPasswordResetException as error:
             flash(error)
     return render_template(
-        'request_password_reset.html',
+        'auth/page_request_password_reset.html',
         problem=problem,
         title='Request Password Reset',
         form=form)

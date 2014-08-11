@@ -22,7 +22,7 @@ def email_activation():
     except EmailActivationException as err:
         flash("Error activating that e-mail address: {0}".format(err))
     return render_template(
-        'email_activation.html',
+        'auth/page_email_activation.html',
         title='Activate Your Account')
 
 
@@ -58,7 +58,7 @@ def send_activation():
         except SendActivationException as error:
             flash(error)
     return render_template(
-        'send_activation.html',
+        'auth/page_send_activation.html',
         problem=problem,
         title='Send New Activation',
         form=form)
@@ -104,6 +104,6 @@ def register():
             emails.send_user_email_activation(activation)
             flash("Please check your e-mail for activation instructions")
     return render_template(
-        'register.html',
+        'auth/page_register.html',
         title='Register',
         form=form)

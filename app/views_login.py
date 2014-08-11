@@ -53,7 +53,7 @@ def login():
     except LoginException as error:
         flash(error)
     return render_template(
-        'login.html',
+        'auth/page_login.html',
         problem=problem,
         title='Login',
         form=form)
