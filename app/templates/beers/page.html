@@ -1,17 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <h3>Beers:</h3>
     {% if beers %}
-        {% for beer in beers %}
-            {% include "beers/beer_list_item.html" %}
-        {% endfor %}
+        <ul>
+            {% for beer in beers %}
+                <li>{% include "beers/list_item_beer.html" %}</li>
+            {% endfor %}
+        </ul>
     {% else %}
         <p>There are no beers--oh the humanity!</p>
+    {% endif %}
+    <h3>Beer Styles:</h3>
+    {% if beers_styles %}
+        <ul>
+            {% for beer in beers_styles %}
+                <li>{% include "beers/list_item_beer.html" %}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no beer styles--oh the humanity!</p>
+    {% endif %}
+    <h3>Beers Style Types:</h3>
+    {% if style_types %}
+        <ul>
+            {% for style_type in style_types %}
+                <li>{% include "beers/list_item_beer_style_type.html" %}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no beer style types--oh the humanity!</p>
     {% endif %}
     {% if admin == True %}
         <p>Beer Admin Tasks:</p>
         <ul>
-            <li><a href="/beers/add">Add New Beer</a></li>
+            <li><a href="/beers/new_beer">Add New Beer</a></li>
+            <li><a href="/beers/new_style">Add New Style</a></li>
+            <li><a href="/beers/new_style_type">Add New Style Type</a></li>
         </ul>
     {% endif %}
 {% endblock %}

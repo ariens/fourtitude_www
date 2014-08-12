@@ -7,14 +7,24 @@ from datetime import timedelta
 from datetime import datetime
 
 
+class BeerStyleType(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(35))
+    description = db.Column(db.Text)
+
 class BeerStyle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
+    description = db.Column(db.Text)
+    link_beeradvocate = db.Column(db.String(255))
+    link_ratebeer = db.Column(db.String(255))
+    style_type_id = db.Integer, db.ForeignKey(BeerStyleType.id)
 
 
 class Beer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
+    description = db.Column(db.Text)
     style_id = db.Column(db.Integer, db.ForeignKey(BeerStyle.id))
 
 

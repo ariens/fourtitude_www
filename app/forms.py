@@ -27,3 +27,12 @@ class PasswordReset(Form):
     activation_code = HiddenField('activation_code')
     password = PasswordField('Password', [Required(), validators.Length(min=6)])
     password_confirm = PasswordField('Password (confirm)', [validators.EqualTo('password', message='Must match %(other_label)s')])
+
+
+class BeerStyleForm(Form):
+    name = TextField('Style Name', [validators.Length(min=3, max=35)])
+    link_ratebeer = TextField('Link (www.ratebeer.com)', [validators.URL, validators.Length(min=10, max=255)])
+    link_beeradvocate = TextField('Link (www.beeradvocate.com)', [validators.URL, validators.Length(min=10, max=255)])
+
+class BeerStyleTypeForm(Form):
+    name = TextField('Style Type Name', [validators.Length(min=3, max=35)])
