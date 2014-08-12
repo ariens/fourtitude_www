@@ -8,10 +8,21 @@ def before_request():
     g.user = current_user
 
 
+
+
 @app.route('/')
 def index():
     user = g.user
     return render_template(
         "home/page.html",
         title="Home",
+        user=user)
+
+
+@app.errorhandler(403)
+def forbidden_403(exception):
+    user = g.user
+    return render_template(
+        "http_codes/403.html",
+        title="403 - Forbidden",
         user=user)

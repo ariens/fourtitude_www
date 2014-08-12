@@ -17,8 +17,8 @@ def send_user_email_activation(email_activation):
     send_email("[www.fourtitude.ca] Activate Your Account",
                "dave@ariens.ca",
                [email_address.email_address],
-               render_template("email_activate_account.txt", user=user, activation=email_activation),
-               render_template("email_activate_account.html", user=user, activation=email_activation))
+               render_template("auth/emails/email_activate_account.txt", user=user, activation=email_activation),
+               render_template("auth/emails/email_activate_account.html", user=user, activation=email_activation))
 
 def send_reset_password_activation(email_activation):
     user = User.query.filter_by(id=email_activation.user_id).first()
@@ -26,5 +26,5 @@ def send_reset_password_activation(email_activation):
     send_email("[www.fourtitude.ca] Reset Your Password",
                "dave@ariens.ca",
                [email_address.email_address],
-               render_template("email_password_reset.txt", user=user, activation=email_activation),
-               render_template("email_password_reset.html", user=user, activation=email_activation))
+               render_template("auth/emails/email_password_reset.txt", user=user, activation=email_activation),
+               render_template("auth/emails/email_password_reset.html", user=user, activation=email_activation))

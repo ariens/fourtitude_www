@@ -70,9 +70,20 @@ class UserEmailAddress(db.Model):
     confirmed = db.Column(db.Boolean, default=False)
 
 
+class UserGroupException(Exception):
+    pass
+
+
 class UserGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
+
+    def has_member(self, user):
+        membership = UserGroupMembership.query.filter_by(user_group_id=self.id, user_id=user.id).first()
+        if membership is None:
+            return False
+        else:
+            return True
 
 
 class UserGroupMembership(db.Model):
