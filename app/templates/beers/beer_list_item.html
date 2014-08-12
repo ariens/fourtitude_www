@@ -1,1 +1,6 @@
-<p>{{beer.id}}: {{beer.name}}</p>
+<p>
+    {{beer.id}}: {{beer.name}}
+    {% if admin == True %}
+         [<a href="/beers/edit/{{ beer.id }}">edit</a>]
+    {% endif %}
+</p>

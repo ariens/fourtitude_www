@@ -6,11 +6,6 @@ from .models import User, UserEmailAddress
 from . import forms
 
 
-@lm.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
 @app.route('/logout')
 def logout():
     logout_user()

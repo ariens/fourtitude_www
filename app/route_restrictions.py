@@ -6,7 +6,7 @@ from app import models
 def restrict(group_name):
     def decorator(fn):
         def wrapped_function(*args, **kwargs):
-            if g.user.__class__.__name__ is 'AnonymousUserMixin':
+            if hasattr(g.user, "username") is not True:
                 msg = "The page you're attempting to access requires you to be logged in"
                 flash(msg)
                 return redirect(url_for('login', next=request.url))

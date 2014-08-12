@@ -8,4 +8,10 @@
     {% else %}
         <p>There are no beers--oh the humanity!</p>
     {% endif %}
+    {% if admin == True %}
+        <p>Beer Admin Tasks:</p>
+        <ul>
+            <li><a href="/beers/add">Add New Beer</a></li>
+        </ul>
+    {% endif %}
 {% endblock %}
