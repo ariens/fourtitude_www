@@ -3,8 +3,7 @@ from app import db
 from config import ACTIVATION_CODE_VALID_FOR_SECONDS
 import string
 import random
-from datetime import timedelta
-from datetime import datetime
+from datetime import timedelta, datetime
 
 
 class BeerStyleType(db.Model):
@@ -18,7 +17,7 @@ class BeerStyle(db.Model):
     description = db.Column(db.Text)
     link_beeradvocate = db.Column(db.String(255))
     link_ratebeer = db.Column(db.String(255))
-    style_type_id = db.Integer, db.ForeignKey(BeerStyleType.id)
+    style_type_id = db.Column(db.Integer, db.ForeignKey(BeerStyleType.id))
 
 
 class Beer(db.Model):

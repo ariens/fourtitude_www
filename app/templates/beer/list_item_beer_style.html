@@ -1,0 +1,6 @@
+<p>
+    {{style.id}}: {{style.name}}
+    {% if admin == True %}
+         [<a href="/beer/edit/style/{{ style.id }}">edit</a>]
+    {% endif %}
+</p>
