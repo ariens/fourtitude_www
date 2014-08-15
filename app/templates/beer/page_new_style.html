@@ -9,6 +9,18 @@
             {% endfor %}<br>
         </p>
         <p>
+            {{form.style_type.label}} {{form.style_type}}
+            {% for error in form.errors.style_type %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            {{form.description.label}} {{form.description}}
+            {% for error in form.errors.description %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
             {{form.link_ratebeer.label}} {{form.link_ratebeer}}
             {% for error in form.errors.link_ratebeer %}
                 <span style="color: red;">[{{error}}]</span>

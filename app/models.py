@@ -11,20 +11,39 @@ class BeerStyleType(db.Model):
     name = db.Column(db.String(35))
     description = db.Column(db.Text)
 
+    def __init__(self, name, description):
+        print('here i am in init')
+        self.name = name
+        self.description = description
+
+    def __str__(self):
+        return self.name
+
+
 class BeerStyle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
     description = db.Column(db.Text)
     link_beeradvocate = db.Column(db.String(255))
     link_ratebeer = db.Column(db.String(255))
-    style_type_id = db.Column(db.Integer, db.ForeignKey(BeerStyleType.id))
+    style_type_id = db.Column(db.Integer, db.ForeignKey('beer_style_type.id'))
+    style_type = db.relationship('BeerStyleType', backref=db.backref('beer_style', lazy='dynamic'))
+
+    def __init__(self, id, name, description, link_beeradvocate, link_ratebeer, style_type):
+        self.id = id
+        self.name = name
+        self.description = description
+        self.link_beeradvocate = link_beeradvocate
+        self.link_ratebeer = link_ratebeer
+        self.style_type = style_type
+
 
 
 class Beer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
     description = db.Column(db.Text)
-    style_id = db.Column(db.Integer, db.ForeignKey(BeerStyle.id))
+    style_id = db.Column(db.Integer, db.ForeignKey('beer_style.id'))
 
 
 class User(db.Model):

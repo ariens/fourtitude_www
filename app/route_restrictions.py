@@ -11,7 +11,6 @@ def restrict(group_name):
                 flash(msg)
                 return redirect(url_for('login', next=request.url))
             else:
-                print(g.user)
                 group = models.UserGroup.query.filter_by(name=group_name).first()
                 if group is None:
                     msg = "Can't find a group with name=" + group_name

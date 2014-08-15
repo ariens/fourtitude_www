@@ -49,6 +49,43 @@ def new_style():
         form=form)
 
 
+@app.route('/beer/edit/style/', methods=['GET', 'POST'], defaults={'style_type_id': None})
+@app.route('/beer/edit/style/<int:style_id>', methods=['GET', 'POST'])
+@route_restrictions.restrict(group_name='beer_admin')
+def edit_style(style_id):
+    problem = None
+    form = BeerStyleForm()
+    if style_id is None:
+        style = BeerStyle()
+    else:
+        style = BeerStyle.query.get(style_id)
+    try:
+        if form.validate_on_submit():
+            style.name = form.name.data
+            style.style_type = form.style_type.data
+            style.description = form.description.data
+            style.link_beeradvocate = form.link_beeradvocate.data
+            style.link_ratebeer = form.link_ratebeer.data
+            db.session.add(style)
+            db.session.commit()
+            flash("Style: '" + style.name + "' Saved!")
+            return redirect(url_for('beer_admin'))
+        else:
+            form.name.data = style.name
+            form.description.data = style.description
+            form.link_beeradvocate.data = style.link_beeradvocate
+            form.link_ratebeer.data = style.link_ratebeer
+            form.style_type.data = style.style_type
+    except Exception as error:
+        print(error)
+        flash(error)
+    return render_template(
+        'beer/page_new_style.html',
+        problem=problem,
+        title='Edit Style',
+        form=form)
+
+
 @app.route('/beer/edit/style_type/', methods=['GET', 'POST'], defaults={'style_type_id': None})
 @app.route('/beer/edit/style_type/<int:style_type_id>', methods=['GET', 'POST'])
 @route_restrictions.restrict(group_name='beer_admin')
