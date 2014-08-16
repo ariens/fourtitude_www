@@ -75,10 +75,8 @@ def manage_beer_object(object_class, object_id):
     try:
         if form.validate_on_submit():
             form.populate_obj(managed_obj)
-            print("date_brewed val: %s date_brewed type: %s" % (managed_obj.date_brewed, managed_obj.date_brewed.__class__))
             if hasattr(managed_obj, 'form_populate_helper'):
                 managed_obj.form_populate_helper()
-            print("after helper call")
             db.session.add(managed_obj)
             db.session.commit()
             flash("Object: '%s' Saved!" % managed_obj.get_auto_manage_label())
