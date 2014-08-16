@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action="" method="post" name="new_style">
+        {{form.hidden_tag()}}
+        <p>
+            {{form.hex.label}} {{form.hex}}
+            {% for error in form.errors.hex %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            {{form.name.label}} {{form.name}}
+            {% for error in form.errors.name %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            {{form.style.label}} {{form.style}}
+            {% for error in form.errors.style %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            {{form.description.label}} {{form.description}}
+            {% for error in form.errors.description %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}<br>
+        </p>
+        <p>
+            {{form.recipe.label}} {{form.recipe}}
+            {% for error in form.errors.recipe %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{form.gallons.label}} {{form.gallons}}
+            {% for error in form.errors.gallons %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{form.date_brewed.label}} {{form.date_brewed}}
+            {% for error in form.errors.date_brewed %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{form.date_bottled.label}} {{form.date_bottled}}
+            {% for error in form.errors.date_bottled %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{form.gravity_og.label}} {{form.gravity_og}}
+            {% for error in form.errors.gravity_og %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{form.gravity_fg.label}} {{form.gravity_fg}}
+            {% for error in form.errors.gravity_fg %}
+                <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p><input type="submit" value="Save"></p>
+    </form>
+{% endblock %}

@@ -14,8 +14,14 @@ class BeerStyleType(db.Model):
         return self.name
 
     @staticmethod
-    def get_label():
+    def get_auto_manage_label():
         return "Style Type"
+
+    def get_auto_manage_title(self):
+        if self.id is not None:
+            return "Edit Style Type"
+        else:
+            return "New Style Type"
 
     @staticmethod
     def get_template():
@@ -35,8 +41,14 @@ class BeerStyle(db.Model):
         return self.name
 
     @staticmethod
-    def get_label():
-        return "Style"
+    def get_auto_manage_label():
+        return "Beer Style"
+
+    def get_auto_manage_title(self):
+        if self.id is not None:
+            return "Edit Beer Style Type"
+        else:
+            return "New Beer Style Type"
 
     @staticmethod
     def get_template():
@@ -45,9 +57,38 @@ class BeerStyle(db.Model):
 
 class Beer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    hex = db.Column(db.String(5))
     name = db.Column(db.String(35))
     description = db.Column(db.Text)
+    recipe = db.Column(db.Text)
+    gallons = db.Column(db.Integer)
+    date_brewed = db.Column(db.Date)
+    date_bottled = db.Column(db.Date)
+    gravity_og = db.Column(db.Integer)
+    gravity_fg = db.Column(db.Integer)
     style_id = db.Column(db.Integer, db.ForeignKey('beer_style.id'))
+    style = db.relationship('BeerStyle', backref=db.backref('beer', lazy='dynamic'))
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_auto_manage_label():
+        return "Beer"
+
+    @staticmethod
+    def get_template():
+        return "beer/manage_beer.html"
+
+    def get_auto_manage_title(self):
+        if self.id is not None:
+            return "Edit Beer"
+        else:
+            return "New Beer"
+
+    def form_populate_helper(self):
+        self.date_brewed = datetime.strptime(str(self.date_brewed), '%Y-%m-%d').date()
+        self.date_bottled = datetime.strptime(str(self.date_bottled), '%Y-%m-%d').date()
 
 
 class User(db.Model):
