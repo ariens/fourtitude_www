@@ -1,7 +1,7 @@
 from flask import render_template, g
 from flask_login import current_user
-from app import lm, app
-from app import models
+from fourtitude import lm, app
+from fourtitude import models
 
 
 @lm.user_loader

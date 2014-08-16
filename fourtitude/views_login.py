@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 import flask_login
 from flask_login import logout_user
-from app import app, lm, crypto
+from fourtitude import app, crypto
 from .models import User, UserEmailAddress
 from . import forms
 

@@ -2,8 +2,9 @@ from flask.ext.wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, validators, HiddenField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required
-from app import db
-from app import models
+from fourtitude import db
+#import fourtitude
+from fourtitude import models
 
 
 class EmailOnly(Form):

@@ -1,6 +1,6 @@
 from functools import update_wrapper
 from flask import g, flash, request, redirect, url_for, abort
-from app import models
+from fourtitude import models
 
 def restrict(group_name):
     def decorator(fn):

@@ -1,11 +1,8 @@
-import app
-from app import db
+from fourtitude import lm, db
 from config import ACTIVATION_CODE_VALID_FOR_SECONDS
 import string
 import random
 from datetime import timedelta, datetime
-from app import forms
-#from .forms import BeerStyleTypeForm, BeerStyleForm
 
 
 class BeerStyleType(db.Model):
@@ -19,10 +16,6 @@ class BeerStyleType(db.Model):
     @staticmethod
     def get_label():
         return "Style Type"
-
-    @staticmethod
-    def get_form_class():
-        return forms.BeerStyleTypeForm
 
     @staticmethod
     def get_template():
@@ -44,10 +37,6 @@ class BeerStyle(db.Model):
     @staticmethod
     def get_label():
         return "Style"
-
-    @staticmethod
-    def get_form_class():
-        return forms.BeerStyleForm
 
     @staticmethod
     def get_template():
@@ -188,6 +177,6 @@ class EmailActivation(db.Model):
         return activation
 
 
-@app.lm.user_loader
+@lm.user_loader
 def load_user(id):
     return User.query.get(int(id))

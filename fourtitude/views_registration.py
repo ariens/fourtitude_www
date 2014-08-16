@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app, db, crypto
+from fourtitude import app, db, crypto
 from .models import User, UserEmailAddress, EmailActivation, EmailActivationException
 from . import forms
 from . import emails

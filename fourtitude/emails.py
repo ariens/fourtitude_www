@@ -1,5 +1,5 @@
 from flask.ext.mail import Message
-from app import mail
+from fourtitude import mail
 from .models import User, UserEmailAddress
 from flask import render_template
 

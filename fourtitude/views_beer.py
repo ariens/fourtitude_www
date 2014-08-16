@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
-from app import app, db, route_restrictions
-from app.models import Beer, BeerStyle, BeerStyleType
-from app.forms import BeerStyleForm, BeerStyleTypeForm
+from fourtitude import app, db, route_restrictions
+from fourtitude.models import Beer, BeerStyle, BeerStyleType
+from fourtitude.forms import BeerStyleForm, BeerStyleTypeForm
 
 
 @app.route('/beer', methods=['GET', 'POST'])
@@ -100,16 +100,15 @@ def manage_beer_object(object, object_id):
     :raise Exception: On error
     """
     auto_manage_registry = {
-        'BeerStyleType': BeerStyleType,
-        'BeerStyle': BeerStyle,
-        'Beer': Beer}
+        'BeerStyleType': {'class': BeerStyleType, 'form': BeerStyleTypeForm},
+        'BeerStyle': {'class': BeerStyle, 'form': BeerStyleForm}}
     if not object in auto_manage_registry:
         raise Exception("The object '%s' is not auto-managed" % object)
-    ManagedClass = auto_manage_registry[object]
+    ManagedClass = auto_manage_registry[object]['class']
     managed_obj = ManagedClass()
     if object_id is not None:
         managed_obj = ManagedClass.query.get(object_id)
-    ManagedClassForm = ManagedClass.get_form_class()
+    ManagedClassForm = auto_manage_registry[object]['form']
     form = ManagedClassForm(obj=managed_obj)
     try:
         if form.validate_on_submit():
