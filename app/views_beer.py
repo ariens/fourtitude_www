@@ -86,10 +86,48 @@ def edit_style(style_id):
         form=form)
 
 
-@app.route('/beer/edit/style_type/', methods=['GET', 'POST'], defaults={'style_type_id': None})
-@app.route('/beer/edit/style_type/<int:style_type_id>', methods=['GET', 'POST'])
+@app.route('/beer/manage/<object>/', methods=['GET', 'POST'], defaults={'object_id': None})
+@app.route('/beer/manage/<object>/<int:object_id>', methods=['GET', 'POST'])
 @route_restrictions.restrict(group_name='beer_admin')
-def edit_style_type(style_type_id):
+def manage_beer_object(object, object_id):
+    """
+    Associates a registry of managed object names to their class name and form names
+    When an object_id is specified the existing object's form is presented for editing
+    When no object_id is specified a blank form is presented for creating a new object
+    :param object: The class name of the managed object
+    :param object_id: The object's id when editing existing
+    :return: Rendered form when editing/creating, redirect upon success
+    :raise Exception: On error
+    """
+    auto_manage_registry = {
+        'BeerStyleType': BeerStyleType,
+        'BeerStyle': BeerStyle,
+        'Beer': Beer}
+    if not object in auto_manage_registry:
+        raise Exception("The object '%s' is not auto-managed" % object)
+    ManagedClass = auto_manage_registry[object]
+    managed_obj = ManagedClass()
+    if object_id is not None:
+        managed_obj = ManagedClass.query.get(object_id)
+    ManagedClassForm = ManagedClass.get_form_class()
+    form = ManagedClassForm(obj=managed_obj)
+    try:
+        if form.validate_on_submit():
+            form.populate_obj(managed_obj)
+            db.session.add(managed_obj)
+            db.session.commit()
+            flash("Object: '%s' Saved!" % ManagedClass.get_label())
+            return redirect(url_for('beer_admin'))
+    except Exception as error:
+        flash(error)
+    return render_template(
+        ManagedClass.get_template(),
+        title='Generic Title',
+        form=form)
+
+@app.route('/beer/delete/style_type/<int:style_type_id>', methods=['GET', 'POST'])
+@route_restrictions.restrict(group_name='beer_admin')
+def delete_style_type(style_type_id):
     problem = None
     form = BeerStyleTypeForm()
     if style_type_id is None:

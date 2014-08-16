@@ -1,6 +1,7 @@
 from flask import render_template, g
 from flask_login import current_user
-from app import lm, app, models
+from app import lm, app
+from app import models
 
 
 @lm.user_loader
@@ -11,7 +12,6 @@ def load_user(user_id):
 @app.before_request
 def before_request():
     g.user = current_user
-
 
 
 @app.route('/')

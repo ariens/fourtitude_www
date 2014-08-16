@@ -2,8 +2,9 @@ from flask.ext.wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, validators, HiddenField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required
-from .models import BeerStyleType
 from app import db
+from app import models
+
 
 class EmailOnly(Form):
     email = TextField('Email Address', [validators.Length(min=6, max=35)])
@@ -33,14 +34,14 @@ class PasswordReset(Form):
 
 class BeerStyleTypeForm(Form):
     name = TextField('Style Type Name', [validators.Length(min=3, max=35)])
+    description = TextAreaField('Description')
 
 
 class BeerStyleForm(Form):
     name = TextField('Style Name', [validators.Length(min=3, max=35)])
-    description = TextAreaField('Description', [validators.Length(min=3, max=35)])
+    description = TextAreaField('Description')
     #category = QuerySelectField('category', query_factory=lambda: db.session.query(Category), get_pk=lambda a: a.id, get_label=lambda a: a.name)
-    style_type = QuerySelectField('category', query_factory=lambda: db.session.query(BeerStyleType), get_pk=lambda a: a.id, get_label=lambda a: a.name)
+    style_type = QuerySelectField('category', query_factory=lambda: db.session.query(models.BeerStyleType), get_pk=lambda a: a.id, get_label=lambda a: a.name)
     #style_type = QuerySelectField('Type', query_factory=BeerStyleType.query.all)
     link_ratebeer = TextField('Link (www.ratebeer.com)', [validators.URL, validators.Length(min=10, max=255)])
     link_beeradvocate = TextField('Link (www.beeradvocate.com)', [validators.URL, validators.Length(min=10, max=255)])
-

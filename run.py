@@ -1,3 +1,3 @@
 #!flask/bin/python
-from app import app
+from fourtitude import app
 app.run(host='localhost', debug=True)
