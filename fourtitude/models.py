@@ -5,7 +5,32 @@ import random
 from datetime import timedelta, datetime
 
 
-class BeerStyleType(db.Model):
+class ManagedObjectException(Exception):
+    pass
+
+class ForeignKeyDependency(Exception):
+    pass
+
+class ManagedObject():
+
+    @staticmethod
+    def get_auto_manage_label():
+        raise ManagedObjectException("Implementer doesn't support get_auto_manage_label()")
+
+    @staticmethod
+    def manage_template():
+        raise ManagedObjectException("Implementer doesn't support manage_template()")
+
+    @staticmethod
+    def delete_template():
+        raise ManagedObjectException("Implementer doesn't support delete_template()")
+
+    @staticmethod
+    def foreign_key_protected():
+        raise ForeignKeyDependency("Implementer doesn't support foreign_key_protection()")
+
+
+class BeerStyleType(db.Model, ManagedObject):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
     description = db.Column(db.Text)
@@ -25,8 +50,11 @@ class BeerStyleType(db.Model):
     def delete_template():
         return "beer/delete_beer_style_type.html"
 
+    def foreign_key_protected(self):
+        return BeerStyle.query.filter_by(style_type_id=self.id).first() is None
 
-class BeerStyle(db.Model):
+
+class BeerStyle(db.Model, ManagedObject):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35))
     description = db.Column(db.Text)
@@ -50,8 +78,10 @@ class BeerStyle(db.Model):
     def delete_template():
         return "beer/delete_beer_style.html"
 
+    def foreign_key_protected(self):
+        return Beer.query.filter_by(style_id=self.id).first() is None
 
-class Beer(db.Model):
+class Beer(db.Model, ManagedObject):
     id = db.Column(db.Integer, primary_key=True)
     hex = db.Column(db.String(5))
     name = db.Column(db.String(35))
@@ -83,6 +113,9 @@ class Beer(db.Model):
     def form_populate_helper(self):
         self.date_brewed = datetime.strptime(str(self.date_brewed), '%Y-%m-%d').date()
         self.date_bottled = datetime.strptime(str(self.date_bottled), '%Y-%m-%d').date()
+
+    def foreign_key_protected(self):
+        return True
 
 
 class User(db.Model):
