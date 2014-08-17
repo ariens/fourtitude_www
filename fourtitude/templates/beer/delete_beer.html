@@ -1,0 +1,7 @@
+{% extends "confirm.html" %}
+
+{% block chopping_block %}
+    <p>Are you sure you want to delete this beer?</p>
+    {%  set beer = managed_obj %}
+    {% include "beer/list_item_beer.html" %}
+{%  endblock %}
