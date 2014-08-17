@@ -15,17 +15,15 @@ class BeerStyleType(db.Model):
 
     @staticmethod
     def get_auto_manage_label():
-        return "Style Type"
-
-    def get_auto_manage_title(self):
-        if self.id is not None:
-            return "Edit Style Type"
-        else:
-            return "New Style Type"
+        return "Beer Style Type"
 
     @staticmethod
-    def get_template():
-        return "beer/manage_style_type.html"
+    def manage_template():
+        return "beer/manage_beer_style_type.html"
+
+    @staticmethod
+    def delete_template():
+        return "beer/delete_beer_style_type.html"
 
 
 class BeerStyle(db.Model):
@@ -44,15 +42,13 @@ class BeerStyle(db.Model):
     def get_auto_manage_label():
         return "Beer Style"
 
-    def get_auto_manage_title(self):
-        if self.id is not None:
-            return "Edit Beer Style Type"
-        else:
-            return "New Beer Style Type"
+    @staticmethod
+    def manage_template():
+        return "beer/manage_beer_style.html"
 
     @staticmethod
-    def get_template():
-        return "beer/manage_style.html"
+    def delete_template():
+        return "beer/delete_beer_style.html"
 
 
 class Beer(db.Model):
@@ -77,14 +73,12 @@ class Beer(db.Model):
         return "Beer"
 
     @staticmethod
-    def get_template():
+    def manage_template():
         return "beer/manage_beer.html"
 
-    def get_auto_manage_title(self):
-        if self.id is not None:
-            return "Edit Beer"
-        else:
-            return "New Beer"
+    @staticmethod
+    def delete_template():
+        return "beer/delete_beer.html"
 
     def form_populate_helper(self):
         self.date_brewed = datetime.strptime(str(self.date_brewed), '%Y-%m-%d').date()

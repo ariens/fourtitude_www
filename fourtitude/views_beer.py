@@ -1,7 +1,7 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for
 from fourtitude import app, db, route_restrictions
 from fourtitude.models import Beer, BeerStyle, BeerStyleType
-from fourtitude.forms import BeerForm, BeerStyleForm, BeerStyleTypeForm
+from fourtitude.forms import ConfirmForm, BeerForm, BeerStyleForm, BeerStyleTypeForm
 
 
 @app.route('/beer', methods=['GET', 'POST'])
@@ -29,7 +29,7 @@ def beer_admin():
         beers=all_beers,
         styles=all_styles,
         style_types=all_style_types,
-            title='Beer Management')
+        title='Beer Management')
 
 
 @app.route('/beer/manage/<object_class>/', methods=['GET', 'POST'], defaults={'object_id': None})
@@ -66,7 +66,9 @@ def manage_beer_object(object_class, object_id):
     ManagedClass = auto_manage_registry[object_class]['class_name']
     managed_obj = ManagedClass()
 
+    verb = 'Create'
     if object_id is not None:
+        verb = 'Update'
         managed_obj = ManagedClass.query.get(object_id)
 
     ManagedClassForm = auto_manage_registry[object_class]['class_form']
@@ -84,32 +86,51 @@ def manage_beer_object(object_class, object_id):
     except Exception as error:
         flash(error)
     return render_template(
-        ManagedClass.get_template(),
-        title=managed_obj.get_auto_manage_title(),
+        ManagedClass.manage_template(),
+        title="%s %s" % (verb, managed_obj.get_auto_manage_label()),
         form=form)
 
-@app.route('/beer/delete/style_type/<int:style_type_id>', methods=['GET', 'POST'])
-@route_restrictions.restrict(group_name='beer_admin')
-def delete_style_type(style_type_id):
-    problem = None
-    form = BeerStyleTypeForm()
-    if style_type_id is None:
-        style_type = BeerStyleType()
-    else:
-        style_type = BeerStyleType.query.get(style_type_id)
+@app.route('/beer/delete/<object_class>/<int:object_id>', methods=['GET', 'POST'])
+#@route_restrictions.restrict(group_name='beer_admin')
+def delete_beer_object(object_class, object_id):
+    """
+    Associates a registry of managed object to their class name
+    Displays a confirmation before deletion
+    :param object_class: The class name of the managed object
+    :param object_id: The object's id when editing existing
+    :return: Rendered form when confirming, redirects upon commit
+    :raise Exception: Any error
+    """
+    auto_manage_registry = {
+        'BeerStyleType': {
+            'class_name': BeerStyleType,
+        },
+        'BeerStyle': {
+            'class_name': BeerStyle,
+        },
+        'Beer': {
+            'class_name': Beer,
+        }
+    }
+
+    if not object_class in auto_manage_registry:
+        raise Exception("The object '%s' is not auto-managed" % object_class)
+
+    ManagedClass = auto_manage_registry[object_class]['class_name']
+    managed_obj = ManagedClass.query.get(object_id)
+
     try:
-        if form.validate_on_submit():
-            style_type.name = form.name.data
-            db.session.add(style_type)
-            db.session.commit()
-            flash("Style Type: '" + style_type.name + "' Saved!")
-            return redirect(url_for('beer_admin'))
-        else:
-            form.name.data = style_type.name
+        form = ConfirmForm()
+        if object_id is None:
+            raise Exception("Missing object_id")
+
+        if request.method == 'POST':
+            flash(request.form['action'])
+            #return redirect(url_for('beer_admin'))
     except Exception as error:
         flash(error)
     return render_template(
-        'beer/page_new_style_type.html',
-        problem=problem,
-        title='Add A New Style Type',
-        form=form)
+        ManagedClass.delete_template(),
+        form=form,
+        managed_obj=managed_obj,
+        title="Please Confirm")

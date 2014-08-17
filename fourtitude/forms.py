@@ -17,6 +17,10 @@ class LoginForm(Form):
     remember_me = BooleanField('remember_me', default=False)
 
 
+class ConfirmForm(Form):
+    pass
+
+
 class RegisterForm(Form):
     username = TextField('Username', [validators.Length(min=3, max=35)])
     email = TextField('E-mail Address', [validators.Email()])

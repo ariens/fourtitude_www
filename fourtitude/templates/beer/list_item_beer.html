@@ -1,6 +1,7 @@
 <p>
     {{beer.id}}: {{beer.name}}
     {% if admin == True %}
-         [<a href="/beer/manage/Beer/{{ beer.id }}">edit</a>]
+        [<a href="/beer/manage/Beer/{{ beer.id }}">edit</a>
+        | <a href="/beer/delete/Beer/{{ beer.id }}">delete</a>]
     {% endif %}
 </p>
