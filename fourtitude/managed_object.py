@@ -1,6 +1,6 @@
 from flask import render_template, request, flash, redirect, url_for
 from fourtitude import db
-from fourtitude.forms import ConfirmForm
+from fourtitude.user_forms import ConfirmForm
 
 
 class ManagedObjectException(Exception):
@@ -25,8 +25,7 @@ class ManagedObject():
     def delete_template():
         raise ManagedObjectException("Implementer doesn't support delete_template()")
 
-    @staticmethod
-    def foreign_key_protected():
+    def foreign_key_protected(self):
         raise ForeignKeyDependency("Implementer doesn't support foreign_key_protection()")
 
 

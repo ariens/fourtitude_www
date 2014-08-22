@@ -11,9 +11,6 @@ lm.init_app(app)
 lm.login_view = 'login'
 mail = Mail(app)
 
-import fourtitude.views
-import fourtitude.views_beer
-import fourtitude.views_login
-import fourtitude.views_registration
-import fourtitude.views_password_reset
-
+from . import views
+from . import beer_views
+from . import user_views

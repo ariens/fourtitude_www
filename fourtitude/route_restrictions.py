@@ -1,6 +1,7 @@
 from functools import update_wrapper
 from flask import g, flash, request, redirect, url_for, abort
-from fourtitude import models
+from fourtitude import user_models
+
 
 def restrict(group_name):
     def decorator(fn):
@@ -10,7 +11,7 @@ def restrict(group_name):
                 flash(msg)
                 return redirect(url_for('login', next=request.url))
             else:
-                group = models.UserGroup.query.filter_by(name=group_name).first()
+                group = user_models.UserGroup.query.filter_by(name=group_name).first()
                 if group is None:
                     msg = "Can't find a group with name=" + group_name
                     flash(msg)

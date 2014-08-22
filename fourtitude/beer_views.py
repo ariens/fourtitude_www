@@ -1,7 +1,7 @@
 from flask import render_template
 from fourtitude import app, route_restrictions
-from fourtitude.models import Beer, BeerStyle, BeerStyleType
-from fourtitude.forms import BeerForm, BeerStyleForm, BeerStyleTypeForm
+from fourtitude.beer_forms import BeerForm, BeerStyleForm, BeerStyleTypeForm
+from fourtitude.beer_models import Beer, BeerStyle, BeerStyleType
 from fourtitude.managed_object import manage_object, delete_object
 
 
@@ -30,7 +30,7 @@ def list_beers(admin=False):
     return render_template(
         'beer/page.html',
         admin=admin,
-        beers=all_beers,
+            beers=all_beers,
         styles=all_styles,
         style_types=all_style_types,
         title='Beers')

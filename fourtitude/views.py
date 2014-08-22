@@ -1,12 +1,12 @@
 from flask import render_template, g
 from flask_login import current_user
 from fourtitude import lm, app
-from fourtitude import models
+from fourtitude import user_models
 
 
 @lm.user_loader
 def load_user(user_id):
-    return models.User.query.get(int(user_id))
+    return user_models.User.query.get(int(user_id))
 
 
 @app.before_request
