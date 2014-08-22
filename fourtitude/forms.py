@@ -3,7 +3,6 @@ from wtforms import TextField, BooleanField, PasswordField, validators, HiddenFi
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import Required
 from fourtitude import db
-#import fourtitude
 from fourtitude import models
 
 
@@ -50,20 +49,20 @@ class BeerStyleForm(Form):
     description = TextAreaField('Description')
     style_type = QuerySelectField('Type', query_factory=lambda: db.session.query(models.BeerStyleType),
                                   get_pk=lambda a: a.id, get_label=lambda a: a.name)
-    link_ratebeer = TextField('Link (www.ratebeer.com)', [validators.URL, validators.Length(min=10, max=255)])
-    link_beeradvocate = TextField('Link (www.beeradvocate.com)', [validators.URL, validators.Length(min=10, max=255)])
+    link_ratebeer = TextField('Link (www.ratebeer.com)', [validators.URL, validators.Length(max=255)])
+    link_beeradvocate = TextField('Link (www.beeradvocate.com)', [validators.URL, validators.Length(max=255)])
 
 
 class BeerForm(Form):
-    hex = TextField('Hex Code', [validators.Length(min=1, max=3)])
+    hex = TextField('Hex Code', [validators.Length(min=1, max=5)])
     name = TextField('Name', [validators.Length(min=3, max=35)])
     style = QuerySelectField('Style', query_factory=lambda: db.session.query(models.BeerStyle),
                              get_pk=lambda a: a.id, get_label=lambda a: a.name)
     description = TextAreaField('Description')
     recipe = TextAreaField('Recipe')
-    gallons = TextField('Volume (Gallons)', [validators.Length(min=1, max=10)])
-    date_brewed = TextField('Date Brewed', [validators.Length(min=10, max=10)])
-    date_bottled = TextField('Date Bottled', [validators.Length(min=10, max=10)])
-    gravity_og = TextField('Gravity (Original)', [validators.Length(min=1, max=10)])
-    gravity_fg = TextField('Gravity (Final)', [validators.Length(min=1, max=10)])
+    gallons = TextField('Volume (Gallons)', [validators.Length(max=10)])
+    date_brewed = TextField('Date Brewed', [validators.Length(max=10)])
+    date_bottled = TextField('Date Bottled', [validators.Length(max=10)])
+    gravity_og = TextField('Gravity (Original)', [validators.Length(max=10)])
+    gravity_fg = TextField('Gravity (Final)', [validators.Length(max=10)])
 

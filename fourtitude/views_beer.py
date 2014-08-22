@@ -18,7 +18,7 @@ def beers():
 
 
 @app.route('/beer/manage', methods=['GET', 'POST'])
-@route_restrictions.restrict(group_name='beer_admin')
+#@route_restrictions.restrict(group_name='beer_admin')
 def beer_admin():
     all_beers = Beer.query.all()
     all_styles = BeerStyle.query.all()
@@ -34,7 +34,7 @@ def beer_admin():
 
 @app.route('/beer/manage/<object_class>/', methods=['GET', 'POST'], defaults={'object_id': None})
 @app.route('/beer/manage/<object_class>/<int:object_id>', methods=['GET', 'POST'])
-@route_restrictions.restrict(group_name='beer_admin')
+#@route_restrictions.restrict(group_name='beer_admin')
 def manage_beer_object(object_class, object_id):
     """
     Associates a registry of managed object to their class name and form name
@@ -51,7 +51,7 @@ def manage_beer_object(object_class, object_id):
             'class_form': BeerStyleTypeForm
         },
         'BeerStyle': {
-                'class_name': BeerStyle,
+            'class_name': BeerStyle,
             'class_form': BeerStyleForm
         },
         'Beer': {
@@ -90,8 +90,9 @@ def manage_beer_object(object_class, object_id):
         title="%s %s" % (verb, managed_obj.get_auto_manage_label()),
         form=form)
 
+
 @app.route('/beer/delete/<object_class>/<int:object_id>', methods=['GET', 'POST'])
-@route_restrictions.restrict(group_name='beer_admin')
+#@route_restrictions.restrict(group_name='beer_admin')
 def delete_beer_object(object_class, object_id):
     """
     Associates a registry of managed object to their class name

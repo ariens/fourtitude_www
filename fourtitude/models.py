@@ -8,8 +8,10 @@ from datetime import timedelta, datetime
 class ManagedObjectException(Exception):
     pass
 
+
 class ForeignKeyDependency(Exception):
     pass
+
 
 class ManagedObject():
 
@@ -81,6 +83,7 @@ class BeerStyle(db.Model, ManagedObject):
     def foreign_key_protected(self):
         return Beer.query.filter_by(style_id=self.id).first() is None
 
+
 class Beer(db.Model, ManagedObject):
     id = db.Column(db.Integer, primary_key=True)
     hex = db.Column(db.String(5))
@@ -111,8 +114,14 @@ class Beer(db.Model, ManagedObject):
         return "beer/delete_beer.html"
 
     def form_populate_helper(self):
-        self.date_brewed = datetime.strptime(str(self.date_brewed), '%Y-%m-%d').date()
-        self.date_bottled = datetime.strptime(str(self.date_bottled), '%Y-%m-%d').date()
+        if self.date_brewed is not None and self.date_brewed != "":
+            self.date_brewed = datetime.strptime(str(self.date_brewed), '%Y-%m-%d').date()
+        else:
+            self.date_brewed = datetime.today().date()
+        if self.date_bottled is not None and self.date_bottled != "":
+            self.date_bottled = datetime.strptime(str(self.date_bottled), '%Y-%m-%d').date()
+        else:
+            self.date_bottled = datetime.today().date()
 
     def foreign_key_protected(self):
         return True
