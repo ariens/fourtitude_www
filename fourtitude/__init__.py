@@ -14,3 +14,4 @@ mail = Mail(app)
 from . import views
 from . import beer_views
 from . import user_views
+from . import article_views

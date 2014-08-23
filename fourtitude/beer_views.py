@@ -30,7 +30,7 @@ def list_beers(admin=False):
     return render_template(
         'beer/page.html',
         admin=admin,
-            beers=all_beers,
+        beers=all_beers,
         styles=all_styles,
         style_types=all_style_types,
         title='Beers')
@@ -46,10 +46,10 @@ def beer_admin():
 @app.route('/beer/manage/<object_class>/<int:object_id>', methods=['GET', 'POST'])
 @route_restrictions.restrict(group_name='beer_admin')
 def manage_beer_object(object_class, object_id):
-    return manage_object(get_beer_registry(), object_class, object_id)
+    return manage_object(get_beer_registry(), object_class, object_id, 'beer_admin')
 
 
 @app.route('/beer/delete/<object_class>/<int:object_id>', methods=['GET', 'POST'])
 @route_restrictions.restrict(group_name='beer_admin')
 def delete_beer_object(object_class, object_id):
-    return delete_object(get_beer_registry(), object_class, object_id)
+    return delete_object(get_beer_registry(), object_class, object_id, 'beer_admin')

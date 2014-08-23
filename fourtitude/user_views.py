@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import session, g
 import flask_login
 from flask_login import logout_user
@@ -230,6 +231,9 @@ def login():
                 remember_me = session['remember_me']
                 session.pop('remember_me', None)
             flask_login.login_user(user, remember=remember_me)
+            user.last_login = datetime.utcnow()
+            db.session.add(user)
+            db.session.commit()
             return redirect(request.args.get('next') or url_for('index'))
     except LoginException as error:
         flash(error)

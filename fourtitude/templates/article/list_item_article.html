@@ -1,0 +1,11 @@
+<p>
+    <h3>
+        {{article.title}} (posted {{ article.date_posted }} by {{article.user.username}})
+        {% if admin == True %}
+            [<a href="/article/manage/Article/{{ article.id }}">edit</a>
+            | <a href="/article/delete/Article/{{ article.id }}">delete</a>]
+        {% endif %}
+    </h3>
+    {{ article.body }}
+    <hr>
+</p>

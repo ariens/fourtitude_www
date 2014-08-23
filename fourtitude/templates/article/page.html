@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>Articles {% if admin == True %}(<a href="/article/manage/Article/">new</a>){% endif %}:</h3>
+    {% if articles %}
+        {% for article in articles %}
+            {% include "article/list_item_article.html" %}
+        {% endfor %}
+    {% else %}
+        <p>There are no articles--oh the humanity!</p>
+    {% endif %}
+{% endblock %}

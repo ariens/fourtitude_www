@@ -14,6 +14,7 @@ class User(db.Model):
     password_digest = db.Column(db.String(60))
     self_deleted = db.Column(db.Boolean, default=False)
     admin_disabled = db.Column(db.Boolean, default=False)
+    last_login = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<User %r>' % self.username

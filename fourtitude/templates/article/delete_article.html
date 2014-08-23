@@ -1,0 +1,7 @@
+{% extends "confirm.html" %}
+
+{% block chopping_block %}
+    <p>Are you sure you want to delete this article?</p>
+    {%  set article = managed_obj %}
+    {% include "article/list_item_article.html" %}
+{%  endblock %}

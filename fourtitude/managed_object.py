@@ -29,7 +29,7 @@ class ManagedObject():
         raise ForeignKeyDependency("Implementer doesn't support foreign_key_protection()")
 
 
-def manage_object(object_registry, object_class, object_id):
+def manage_object(object_registry, object_class, object_id, next_url):
     """
     Associates a registry of managed object to their class name and form name
     When an object_id is specified the existing object's form is presented for editing
@@ -61,7 +61,7 @@ def manage_object(object_registry, object_class, object_id):
             db.session.add(managed_obj)
             db.session.commit()
             flash("Object: '%s' Saved!" % managed_obj.get_auto_manage_label())
-            return redirect(url_for('beer_admin'))
+            return redirect(url_for(next_url))
     except Exception as error:
         flash(error)
     return render_template(
@@ -70,7 +70,7 @@ def manage_object(object_registry, object_class, object_id):
         form=form)
 
 
-def delete_object(object_registry, object_class, object_id):
+def delete_object(object_registry, object_class, object_id, next_url):
     """
     Associates a registry of managed object to their class name
     Displays a confirmation before deletion
@@ -96,7 +96,7 @@ def delete_object(object_registry, object_class, object_id):
                     db.session.delete(managed_obj)
                     db.session.commit()
                     flash("%s is gone" % managed_obj)
-                    return redirect(url_for('beer_admin'))
+                    return redirect(url_for(next_url))
                 else:
                     flash("We can't delete that because there are related records")
 
