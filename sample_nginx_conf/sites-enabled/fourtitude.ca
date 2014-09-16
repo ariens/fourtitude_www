@@ -8,7 +8,7 @@ server
 {
 	location ^~ /static/  
 	{
-		root /srv/http/www/flask_apps/fourtitude/fourtitude/static;
+		root /srv/http/www/flask_apps/fourtitude/fourtitude/;
 	}
 
 	location / 
