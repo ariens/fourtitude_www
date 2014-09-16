@@ -1,0 +1,31 @@
+upstream uwsgicluster 
+{
+	server 127.0.0.1:5000;
+}
+
+
+server
+{
+	location ^~ /static/  
+	{
+		root /srv/http/www/flask_apps/fourtitude/fourtitude/static;
+	}
+
+	location / 
+	{
+		include            uwsgi_params;
+		uwsgi_pass         uwsgicluster;
+
+		proxy_redirect     off;
+		proxy_set_header   Host $host;
+		proxy_set_header   X-Real-IP $remote_addr;
+		proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header   X-Forwarded-Host $server_name;
+
+	}
+
+    listen					80;
+    server_name				fourtitude.ca www.fourtitude.ca;
+    access_log				/www/fourtitude.ca/logs/access.log;
+    error_log				/www/fourtitude.ca/logs/error.log;
+}
