@@ -15,3 +15,6 @@ from . import views
 from . import beer_views
 from . import user_views
 from . import article_views
+
+from .momentjs import momentjs
+app.jinja_env.globals['momentjs'] = momentjs
