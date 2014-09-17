@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>Beers {% if admin == True %}(<a href="/beer/manage/Beer/">new</a>){% endif %}:</h3>
+    <h3>Brews {% if admin == True %}(<a href="/beer/manage/Beer/">new</a>){% endif %}:</h3>
     {% if beers %}
         <ul>
             {% for beer in beers %}

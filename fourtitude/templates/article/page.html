@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>Articles {% if admin == True %}(<a href="/article/manage/Article/">new</a>){% endif %}:</h3>
+    {% if admin == True %}<h3><a href="/article/manage/Article/">New Article</a></h3>{% endif %}
     {% if articles %}
         {% for article in articles %}
             {% include "article/list_item_article.html" %}

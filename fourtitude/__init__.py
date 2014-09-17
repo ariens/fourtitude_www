@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, g
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.mail import Mail
@@ -18,3 +18,10 @@ from . import article_views
 
 from .momentjs import momentjs
 app.jinja_env.globals['momentjs'] = momentjs
+app.jinja_env.globals['menu'] = {
+    '/': "Home",
+    '/article': 'Blog',
+    '/beer': 'Beers',
+    '/login': 'Login',
+    '/logout': 'Logout',
+}

@@ -1,31 +1,60 @@
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/base.css" rel="stylesheet">
     <script src="/static/js/moment.min.js"></script>
+    <script src="/static/js/jquery-1.11.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
     {% if title %}
-    <title>{{title}} - Fourtitude Brewing Co.</title>
+        <title>{{title}} - Fourtitude Brewing Co.</title>
     {% else %}
-    <title>Fourtitude Brewing Co.</title>
+        <title>Fourtitude Brewing Co.</title>
     {% endif %}
-  </head>
-  <body>
-    <div>Fourtitude Brewing Co [ <a href="/">Home</a>
-        | <a href="/article">Articles</a>
-        | <a href="/article/manage">Manage Articles</a>
-        | <a href="/beer">Beer</a>
-        | <a href="/beer/manage">Manage Beer</a>
-        | <a href="/login">Login</a>
-        | <a href="/logout">Logout</a> ]</div>
-	<h1>{{title}}</h1>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li>{{ message }} </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-	<hr>
-    {% block content %}{% endblock %}
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Fourtitude Brewing Co.</a>
+            </div>
+            <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                {%  if menu %}
+                  {%  for link, name in menu.items() %}
+                      {%  if title == name %}
+                            <li class="active"><a href="{{ link }}">{{ name }}</a></li>
+                      {%  else %}
+                            <li><a href="{{ link }}">{{ name }}</a></li>
+                      {%  endif %}
+                  {% endfor %}
+                {% endif %}
+              </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+	<div class="container">
+        <h1>{{title}}</h1>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        <hr>
+        {% block content %}{% endblock %}
+    </div>
   </body>
 </html>
