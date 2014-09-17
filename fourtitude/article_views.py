@@ -16,7 +16,7 @@ def get_article_registry():
 
 @app.route('/article', methods=['GET', 'POST'])
 def list_articles(admin=False):
-    all_articles = Article.query.all()
+    all_articles = Article.query.order_by(Article.date_posted.desc())
     group = user_models.UserGroup.query.filter_by(name='article_admin').first()
     if hasattr(g.user, "username") is True:
         admin = group.has_member(g.user)
