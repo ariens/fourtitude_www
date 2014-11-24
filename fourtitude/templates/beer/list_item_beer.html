@@ -1,5 +1,5 @@
 <p>
-    {{beer.hex}} : {{beer.name}}
+    {{beer.hex}} : {{beer.name}} {{ beer.get_abv() }} ({{ beer.style.name }})
     {% if admin == True %}
         [<a href="/beer/manage/Beer/{{ beer.id }}">edit</a>
         | <a href="/beer/delete/Beer/{{ beer.id }}">delete</a>]

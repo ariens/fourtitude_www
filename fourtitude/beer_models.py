@@ -96,3 +96,8 @@ class Beer(db.Model, ManagedObject):
 
     def foreign_key_protected(self):
         return True
+
+    def get_abv(self):
+        if self.gravity_fg is not None and self.gravity_og is not None:
+            if self.gravity_fg != "" and self.gravity_og != "":
+                return "- {0:4.1f}% ABV".format((self.gravity_og - self.gravity_fg) * 131)
