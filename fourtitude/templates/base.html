@@ -6,9 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/base.css" rel="stylesheet">
-    <script src="/static/js/moment.min.js"></script>
+    <link rel="stylesheet" href="/static/jquery-ui-1.11.2.custom/jquery-ui.css">
+
     <script src="/static/js/jquery-1.11.1.min.js"></script>
+    <script src="/static/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+    <script src="/static/js/moment.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function() {
+            $("#datepicker").datepicker({ dateFormat: "yy-mm-dd" });
+            $("#datepicker2").datepicker({ dateFormat: "yy-mm-dd" });
+        });
+    </script>
     {% if title %}
         <title>{{title}} - Fourtitude Brewing Co.</title>
     {% else %}
