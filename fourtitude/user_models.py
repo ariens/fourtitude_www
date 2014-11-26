@@ -93,7 +93,9 @@ class EmailActivation(db.Model):
     date_created = db.Column(db.DateTime)
     date_expires = db.Column(db.DateTime)
 
-    def __init__(self, user_id, email_address_id, activated=False, date_created=datetime.utcnow()):
+    def __init__(self, user_id, email_address_id, activated=False, date_created=None):
+        if date_created is None:
+            date_created = datetime.utcnow()
         self.user_id = user_id
         self.email_address_id = email_address_id
         self.activation_code = self.gen_unique_activation_code()
